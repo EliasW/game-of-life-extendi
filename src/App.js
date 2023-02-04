@@ -1,25 +1,45 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from "react"
+import "./App.css"
+import Grid from "./components/Grid"
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import inputfile from "./input.txt"
+import axios from "axios"
+
+const fetchData = async () => {
+  let resp = await axios.get(inputfile)
+  let final = await resp.data
+  var lines = final.split("\r\n");
+  var cols = lines[0].split(" ")[1]
+  var rows = lines[1].split(" ")[1]
+  var generation = lines[2].split(" ")[1]
+
+  var result = {
+    horizontal: cols,
+    vertical: rows,
+    generation: generation
+  };
+  return result
 }
 
-export default App;
+function App() {
+  const [props, setProps] = useState([])
+  const [grid, setGrid] = useState(false)
+
+  //read the initial setting of the game
+  useEffect(() => {
+    const data = fetchData();
+    data.then((res) => {
+      setProps(res)
+      setGrid(true)
+    })
+
+  }, [])
+
+  const { vertical, horizontal, generation } = props
+
+  if (grid && (vertical * horizontal >= generation)) return (<Grid {...props} />)
+  else if (grid && (vertical * horizontal < generation)) return (<> <div style={{ margin: "30px" }}>initial generation is out of grid </div> </>)
+  else return (<> <div style={{ margin: "30px" }}> initial setting not loaded correctly </div> </>)
+}
+
+export default App
