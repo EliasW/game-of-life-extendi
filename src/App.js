@@ -25,7 +25,7 @@ function App() {
   const [props, setProps] = useState([])
   const [grid, setGrid] = useState(false)
 
-  //read the initial setting of the game
+  //read the initial setting (generation, grid size) of the game
   useEffect(() => {
     const data = fetchData();
     data.then((res) => {

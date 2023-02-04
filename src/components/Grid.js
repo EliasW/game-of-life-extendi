@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react"
 import "../App.css"
 
+//construct the Grid based on the input dimensions and generation number
 const constructGrid = (rows, cols, gen) => {
     const grid = []
     for (let i = 0; i < rows; i++) {
@@ -26,16 +27,16 @@ const constructGrid = (rows, cols, gen) => {
     }
     return grid
 }
-
+// Directions: N, S, E, W, NE, NW, SE, SW
 const positions = [
-    [0, 1],
-    [0, -1],
-    [1, -1],
-    [-1, 1],
-    [1, 1],
-    [-1, -1],
-    [1, 0],
-    [-1, 0],
+    [0, 1], // right
+    [0, -1], // left
+    [1, -1], // top left
+    [-1, 1], // top right
+    [1, 1], // top
+    [-1, -1], // bottom
+    [1, 0], // bottom right
+    [-1, 0], // bottom left
 ]
 
 function Grid(props) {
@@ -46,39 +47,40 @@ function Grid(props) {
     useEffect(() => {
         setGrid(constructGrid(horizontal, vertical, generation))
     }, [])
+
     function runSimulation() {
         if (!startRef.current) {
             return
         }
         setGrid((g) => {
-            const nextGrid = g.map((row, i) => {
+            const nextGeneration = g.map((row, i) => {
                 return row.map((cell, j) => {
-                    let sum = 0
+                    let neighbors = 0
                     positions.forEach((position) => {
                         const x = i + position[0]
                         const y = j + position[1]
                         if (x >= 0 && x < horizontal && y >= 0 && y < vertical) {
-                            sum += g[x][y]
+                            neighbors += g[x][y]
                         }
                     })
-                    if (sum < 2 || sum > 3) {
+                    if (neighbors < 2 || neighbors > 3) {
                         return 0
                     }
-                    if (sum === 3) {
+                    if (neighbors === 3) {
                         return 1
                     }
                     return g[i][j]
                 })
             })
-            return nextGrid
+            return nextGeneration
         })
     }
 
     return (
         <>
+        <div className="containerGame"> GAME OF LIFE
             <div className="menuGrid">
-                <button
-                    style={{ marginRight: "20px" }}
+                <button className="playButton"
                     onClick={() => {
                         setStart(!start)
                         if (!start) {
@@ -90,14 +92,13 @@ function Grid(props) {
                     }}                >
                     {start ? "Stop" : "Play"}
                 </button>
-                <button
-                    style={{ marginLeft: "2px" }}
+                <button className="resetButton"
                     onClick={() => setGrid(constructGrid(horizontal, vertical, generation))}
                 >
                     Reset
                 </button>
             </div>
-            <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}>
+            <div className="grid">
                 {grid &&
                     grid.map((rows, i) =>
                         <li key={i} style={{ listStyle: 'none', margin: "20px 0px 10px 20px" }}>{
@@ -106,6 +107,7 @@ function Grid(props) {
                             ))}
                         </li>
                     )}
+            </div>
             </div>
         </>
     )

@@ -1,6 +1,50 @@
-.menuGrid{
+.menuGrid {
   display: flex;
   justify-content: center;
   margin: 10px;
+  font-size: 16px;
+  font-weight: bold;
   align-items: center;
+}
+
+.containerGame {
+  display: flex;
+  padding: 2%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: antiquewhite;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+
+
+button{
+  border-radius: 10px;
+  padding: 10px 20px;
+  text-align: center;
+  display: inline-block;
+  font-size: 12px;
+  font-weight: bold;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+
+.grid {
+  display: flex;
+  border-radius: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+  background-color:whitesmoke;
+}
+
+.playButton{
+  margin-right: 20px;
+  background-color: green;
+}
+
+.resetButton{
+  margin-left: 2px;
+  background-color: green;
 }
